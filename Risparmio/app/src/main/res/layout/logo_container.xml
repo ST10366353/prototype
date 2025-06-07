@@ -1,0 +1,20 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="108dp"
+    android:layout_height="108dp">
+
+    <!-- Background Vector -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_launcher_background"
+        android:contentDescription="Background Vector" />
+
+    <!-- Foreground Logo Image -->
+    <ImageView
+        android:id="@+id/logoImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/the_logo_dorian_wanted"
+        android:contentDescription="App Logo"
+        android:scaleType="centerInside" />
+</FrameLayout>

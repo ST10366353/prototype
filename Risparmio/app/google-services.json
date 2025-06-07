@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "78513594442",
+    "project_id": "risparmio-d2dc5",
+    "storage_bucket": "risparmio-d2dc5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:78513594442:android:39f29176bdd73faf77c6b3",
+        "android_client_info": {
+          "package_name": "com.risparmio.budgetapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMIiwl1gMVY1Ls7UYoyafgobdxAMimPKs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <!-- for  Internet permission -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Risparmio"
+        tools:targetApi="31">
+        <activity
+            android:name=".activities.QuizActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.LoginActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity> <!-- App Activities -->
+        <activity android:name=".activities.RegisterActivity" />
+        <activity android:name=".activities.DashboardActivity" />
+        <activity
+            android:name=".activities.AddExpenseActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity android:name=".activities.AchievementsActivity" />
+        <activity android:name=".activities.AnalysisActivity" />
+        <activity android:name=".activities.ExpenseHistoryActivity" />
+        <activity android:name=".activities.ChallengesActivity" />
+        <activity android:name=".activities.BudgetGoalActivity" />
+        <activity android:name=".activities.CategoryAnalysisActivity" />
+        <activity android:name=".activities.SpendingInsightsActivity" />
+        <activity android:name=".activities.FinancialReportActivity" /> <!-- Keep MainActivity if still needed internally -->
+        <activity android:name=".MainActivity" />
+    </application>
+
+</manifest>
