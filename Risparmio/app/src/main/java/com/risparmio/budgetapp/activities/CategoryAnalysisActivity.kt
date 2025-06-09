@@ -24,7 +24,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.risparmio.budgetapp.R
 
-
+//PhilJay. “MPAndroidChart/MPChartExample/Src/Main at Master · PhilJay/MPAndroidChart.” GitHub, 2025, github.com/PhilJay/MPAndroidChart/tree/master/MPChartExample/src/main. Accessed 6 June 2025.
 class CategoryAnalysisActivity : AppCompatActivity() {
 
     private lateinit var pieChart: PieChart
@@ -37,6 +37,7 @@ class CategoryAnalysisActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_category_analysis)
+
 
         viewModel = ViewModelProvider(this)[CategoryAnalysisViewModel::class.java]
         expenseViewModel = ViewModelProvider(this)[FirebaseExpenseViewModel::class.java]
@@ -119,12 +120,20 @@ class CategoryAnalysisActivity : AppCompatActivity() {
         val entries = data.map { PieEntry(it.amount.toFloat(), it.name) }
         val pieDataSet = PieDataSet(entries, "Spending by Category").apply {
             colors = ColorTemplate.MATERIAL_COLORS.toList()
+            sliceSpace = 3f
+            valueTextSize = 12f
         }
 
         pieChart.data = PieData(pieDataSet)
+        pieChart.setUsePercentValues(true)
         pieChart.description = Description().apply { text = "" }
+        pieChart.isDrawHoleEnabled = true
+        pieChart.holeRadius = 40f
+        pieChart.setEntryLabelColor(android.graphics.Color.BLACK)
+        pieChart.animateY(1000)
         pieChart.invalidate()
     }
+
 
     private fun updateBarChart(data: List<CategoryStat>) {
         val entries = data.mapIndexed { index, stat ->
@@ -133,12 +142,59 @@ class CategoryAnalysisActivity : AppCompatActivity() {
 
         val barDataSet = BarDataSet(entries, "Category Spending").apply {
             colors = ColorTemplate.COLORFUL_COLORS.toList()
+            valueTextSize = 12f
         }
 
         val barData = BarData(barDataSet)
         barChart.data = barData
-        barChart.description = Description().apply { text = "" }
-        barChart.xAxis.valueFormatter = IndexAxisValueFormatter(data.map { it.name })
+
+        // Setup X Axis
+        val xAxis = barChart.xAxis
+        xAxis.valueFormatter = IndexAxisValueFormatter(data.map { it.name })
+        xAxis.granularity = 1f
+        xAxis.setDrawGridLines(false)
+        xAxis.labelRotationAngle = -45f
+
+        // Clear any previous limit lines
+        barChart.axisLeft.removeAllLimitLines()
+
+        // Add limit lines for goals
+        val maxGoal = data.maxOfOrNull { it.maxGoal } ?: 0.0
+        val minGoal = data.minOfOrNull { it.minGoal } ?: 0.0
+
+        val maxGoalLine = com.github.mikephil.charting.components.LimitLine(
+            maxGoal.toFloat(),
+            "Max Goal"
+        ).apply {
+            lineWidth = 2f
+            lineColor = android.graphics.Color.RED
+            textColor = android.graphics.Color.RED
+            textSize = 12f
+        }
+
+        val minGoalLine = com.github.mikephil.charting.components.LimitLine(
+            minGoal.toFloat(),
+            "Min Goal"
+        ).apply {
+            lineWidth = 2f
+            lineColor = android.graphics.Color.GREEN
+            textColor = android.graphics.Color.GREEN
+            textSize = 12f
+        }
+
+        val yAxis = barChart.axisLeft
+        yAxis.removeAllLimitLines()
+        yAxis.addLimitLine(maxGoalLine)
+        yAxis.addLimitLine(minGoalLine)
+
+        // Style
+        yAxis.axisMinimum = 0f
+        barChart.axisRight.isEnabled = false
+
+        barChart.description = Description().apply { text = "Category Spending vs Goals" }
+        barChart.setFitBars(true)
+        barChart.animateY(1000)
         barChart.invalidate()
     }
+
 }

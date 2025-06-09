@@ -27,7 +27,6 @@ import android.util.Log
 import java.io.File
 import java.io.IOException
 import java.util.*
-
 class AddExpenseActivity : AppCompatActivity() {
 
     private lateinit var etDate: TextInputEditText

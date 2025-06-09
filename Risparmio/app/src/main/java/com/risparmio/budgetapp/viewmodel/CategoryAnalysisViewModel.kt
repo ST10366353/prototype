@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.risparmio.budgetapp.data.model.CategoryStat
 import com.risparmio.budgetapp.data.model.firebase.FirebaseExpense
-
+//PhilJay. “MPAndroidChart/MPChartExample/Src/Main at Master · PhilJay/MPAndroidChart.” GitHub, 2025, github.com/PhilJay/MPAndroidChart/tree/master/MPChartExample/src/main. Accessed 6 June 2025.
 class CategoryAnalysisViewModel : ViewModel() {
 
     private val _categoryStats = MutableLiveData<List<CategoryStat>>()
@@ -16,7 +16,9 @@ class CategoryAnalysisViewModel : ViewModel() {
             .filter { !it.category.isNullOrEmpty() }
             .groupBy { it.category!! }
             .map { (category, expenses) ->
-                CategoryStat(category, expenses.sumOf { it.amount })
+                val minGoal = expenses.minOf { it.amount }
+                val maxGoal = expenses.maxOf { it.amount }
+                CategoryStat(category, expenses.sumOf { it.amount }, minGoal, maxGoal)
             }
         _categoryStats.value = stats
     }

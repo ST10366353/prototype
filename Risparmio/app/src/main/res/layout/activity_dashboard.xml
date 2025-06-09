@@ -1,338 +1,351 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Replace LinearLayout with ConstraintLayout -->
 <androidx.constraintlayout.widget.ConstraintLayout
-
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Toolbar -->
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:theme="@style/ThemeOverlay.Material3.ActionBar"
-        app:title="Risparmio"
-        app:titleTextColor="@android:color/white"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <!-- Fire Streak Counter -->
-    <LinearLayout
-        android:id="@+id/fireStreakContainer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:layout_marginTop="12dp"
-        android:layout_marginStart="16dp"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <ImageView
-            android:id="@+id/fireIcon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/fireicon"
-            android:contentDescription="Fire streak icon" />
-
-        <TextView
-            android:id="@+id/txtStreakCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="5"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@android:color/holo_red_dark"
-            android:layout_marginStart="4dp" />
-    </LinearLayout>
-
-    <!-- Currency Selector -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnCurrency"
-        style="@style/Widget.Material3.Button.OutlinedButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="8dp"
-        android:drawableStart="@drawable/ic_currency"
-        android:text="🇿🇦 ZAR"
-        app:iconPadding="8dp"
-        app:layout_constraintEnd_toStartOf="@id/btnAddExpense"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@id/fireStreakContainer"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
-
-    <!-- Add Expense Button -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnAddExpense"
-        style="@style/Widget.Material3.Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="+ Add Expense"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <!-- Achievements Card -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardAchievements"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:cardElevation="4dp"
-        app:cardCornerRadius="12dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintTop_toBottomOf="@id/btnCurrency"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:id="@+id/txtLevel"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="🏆 Level 1\n0 total points"
-                    android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnAchievements"
-                    style="@style/Widget.Material3.Button.OutlinedButton"
-                    android:text="Achievements"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-            <ProgressBar
-                android:id="@+id/progressLevel"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:layout_marginTop="12dp"
-                android:indeterminate="false"
-                android:progress="10"
-                android:progressDrawable="@drawable/progress_drawable" />
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-
-    <!-- Income Card -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardIncome"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="4dp"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="4dp"
-        app:layout_constraintTop_toBottomOf="@id/cardAchievements"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/cardExpenses"
-        app:layout_constraintWidth_percent="0.31">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="12dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="💰"
-                android:textSize="20sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:text="Income"
-                android:textColor="#333"
-                android:textSize="12sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/txtIncome"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="R5000"
-                android:textColor="#4CAF50"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
-    <!-- Expenses Card -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardExpenses"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_marginHorizontal="4dp"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="4dp"
-        app:layout_constraintTop_toBottomOf="@id/cardAchievements"
-        app:layout_constraintStart_toEndOf="@id/cardIncome"
-        app:layout_constraintEnd_toStartOf="@id/cardSavings"
-        app:layout_constraintWidth_percent="0.31">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="12dp"
-            android:gravity="center">
-
-            <TextView
-                android:text="💸"
-                android:textSize="20sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:text="Expenses"
-                android:textStyle="bold"
-                android:textSize="12sp"
-                android:textColor="#333"
-                android:layout_marginTop="6dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:id="@+id/txtExpenses"
-                android:text="R9 250"
-                android:textSize="14sp"
-                android:textColor="#F44336"
-                android:textStyle="bold"
-                android:layout_marginTop="2dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
-    <!-- Savings Card -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardSavings"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="16dp"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="4dp"
-        app:layout_constraintTop_toBottomOf="@id/cardAchievements"
-        app:layout_constraintStart_toEndOf="@id/cardExpenses"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintWidth_percent="0.31">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="12dp"
-            android:gravity="center">
-
-            <TextView
-                android:text="🎯"
-                android:textSize="20sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:text="Savings"
-                android:textStyle="bold"
-                android:textSize="12sp"
-                android:textColor="#333"
-                android:layout_marginTop="6dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:id="@+id/txtSavings"
-                android:text="R 15 750"
-                android:textSize="14sp"
-                android:textColor="#2196F3"
-                android:textStyle="bold"
-                android:layout_marginTop="2dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
-    <!-- Quiz Section (Non-scrollable, above the list) -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/quizCard"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        app:cardElevation="4dp"
-        app:cardCornerRadius="12dp"
-        app:layout_constraintTop_toBottomOf="@id/cardIncome"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Financial Knowledge Quiz"
-                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
-                android:layout_marginBottom="8dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Test your financial knowledge and earn points!"
-                android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-                android:layout_marginBottom="16dp"/>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnStartQuiz"
-                style="@style/Widget.Material3.Button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Start Quiz" />
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-
-    <!-- RecyclerView for Expenses -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvExpenses"
+    <!-- ScrollView wrapping all content except bottom navigation -->
+    <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="12dp"
-        app:layoutManager="LinearLayoutManager"
-        app:layout_constraintTop_toBottomOf="@id/quizCard"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/bottomNavContainer"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- Toolbar -->
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="?attr/colorPrimary"
+                android:theme="@style/ThemeOverlay.Material3.ActionBar"
+                app:title="Risparmio"
+                app:titleTextColor="@android:color/white"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- Fire Streak Counter -->
+            <LinearLayout
+                android:id="@+id/fireStreakContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="12dp"
+                android:layout_marginStart="16dp"
+                app:layout_constraintTop_toBottomOf="@id/toolbar"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <ImageView
+                    android:id="@+id/fireIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/fireicon"
+                    android:contentDescription="Fire streak icon" />
+
+                <TextView
+                    android:id="@+id/txtStreakCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="5"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/holo_red_dark"
+                    android:layout_marginStart="4dp" />
+            </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCurrency"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="8dp"
+                android:drawableStart="@drawable/ic_currency"
+                android:text="🇿🇦 ZAR"
+                app:iconPadding="8dp"
+                app:layout_constraintEnd_toStartOf="@id/btnAddExpense"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@id/fireStreakContainer"
+                app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+            <!-- Add Expense Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAddExpense"
+                style="@style/Widget.Material3.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+ Add Expense"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintTop_toBottomOf="@id/toolbar"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- Achievements Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardAchievements"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:cardElevation="4dp"
+                app:cardCornerRadius="12dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintTop_toBottomOf="@id/btnCurrency"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:id="@+id/txtLevel"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="🏆 Level 1\n0 total points"
+                            android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnAchievements"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:text="Achievements"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <ProgressBar
+                        android:id="@+id/progressLevel"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="8dp"
+                        android:layout_marginTop="12dp"
+                        android:indeterminate="false"
+                        android:progress="10"
+                        android:progressDrawable="@drawable/progress_drawable" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardIncome"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="4dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:layout_constraintTop_toBottomOf="@id/cardAchievements"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/cardExpenses"
+                app:layout_constraintWidth_percent="0.31">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="💰"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="Income"
+                        android:textColor="#333"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/txtIncome"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="R5000"
+                        android:textColor="#4CAF50"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Expenses Card -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardExpenses"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginHorizontal="4dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:layout_constraintTop_toBottomOf="@id/cardAchievements"
+                app:layout_constraintStart_toEndOf="@id/cardIncome"
+                app:layout_constraintEnd_toStartOf="@id/cardSavings"
+                app:layout_constraintWidth_percent="0.31">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:text="💸"
+                        android:textSize="20sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:text="Expenses"
+                        android:textStyle="bold"
+                        android:textSize="12sp"
+                        android:textColor="#333"
+                        android:layout_marginTop="6dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/txtExpenses"
+                        android:text="R301"
+                        android:textSize="14sp"
+                        android:textColor="#F44336"
+                        android:textStyle="bold"
+                        android:layout_marginTop="2dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Savings Card -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardSavings"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:layout_constraintTop_toBottomOf="@id/cardAchievements"
+                app:layout_constraintStart_toEndOf="@id/cardExpenses"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintWidth_percent="0.31">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:text="🎯"
+                        android:textSize="20sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:text="Savings"
+                        android:textStyle="bold"
+                        android:textSize="12sp"
+                        android:textColor="#333"
+                        android:layout_marginTop="6dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/txtSavings"
+                        android:text="R 1750"
+                        android:textSize="14sp"
+                        android:textColor="#2196F3"
+                        android:textStyle="bold"
+                        android:layout_marginTop="2dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Quiz Section (Non-scrollable, above the list) -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/quizCard"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardElevation="4dp"
+                app:cardCornerRadius="12dp"
+                app:layout_constraintTop_toBottomOf="@id/cardIncome"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Financial Knowledge Quiz"
+                        android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                        android:layout_marginBottom="8dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Test your financial knowledge and earn points!"
+                        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                        android:layout_marginBottom="16dp"/>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnStartQuiz"
+                        style="@style/Widget.Material3.Button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Start Quiz" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- RecyclerView for Expenses -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvExpenses"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:nestedScrollingEnabled="true"
+                app:layoutManager="LinearLayoutManager"
+                app:layout_constraintTop_toBottomOf="@id/quizCard"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
     <!-- Bottom Summary and Navigation -->
     <LinearLayout
