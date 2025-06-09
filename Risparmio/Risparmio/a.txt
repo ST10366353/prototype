@@ -1,0 +1,477 @@
+package com.risparmio.budgetapp.activities
+
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.os.Bundle
+import android.widget.*
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.textfield.TextInputEditText
+import com.risparmio.budgetapp.R
+import com.risparmio.budgetapp.data.model.firebase.FirebaseExpense
+import com.risparmio.budgetapp.viewmodel.firebase.FirebaseExpenseViewModel
+import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.util.*
+
+class AddExpenseActivity : AppCompatActivity() {
+
+    private lateinit var etDate: TextInputEditText
+    private lateinit var etStartTime: TextInputEditText
+    private lateinit var etEndTime: TextInputEditText
+    private lateinit var etAmount: TextInputEditText
+    private lateinit var etCategory: AutoCompleteTextView
+    private lateinit var etDescription: TextInputEditText
+    private lateinit var btnAddPhoto: Button
+    private lateinit var btnCancel: Button
+    private lateinit var btnSave: Button
+    private lateinit var imgPreview: ImageView
+    private lateinit var tvNoImageSelected: TextView
+
+    private var selectedImageUri: Uri? = null // Changed to nullable Uri
+    private val calendar = Calendar.getInstance()
+    private lateinit var categoryAdapter: ArrayAdapter<String>
+    private val categories = mutableListOf(
+        "🍔 Groceries", "🚗 Transport", "🏠 Rent", "🎉 Entertainment",
+        "🛒 Shopping", "💡 Utilities", "💼 Work", "🍽️ Dining Out",
+        "✈️ Travel", "🏥 Health", "➕ Add New Category"
+    )
+
+    companion object {
+        private const val REQUEST_CODE_PICK_IMAGE = 1001
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_add_expense)
+
+        setupViews()
+        setupCategoryDropdown()
+        setupListeners()
+    }
+
+    private fun setupViews() {
+        etDate = findViewById(R.id.etDate)
+        etStartTime = findViewById(R.id.etStartTime)
+        etEndTime = findViewById(R.id.etEndTime)
+        etAmount = findViewById(R.id.etAmount)
+        etCategory = findViewById(R.id.etCategory)
+        etDescription = findViewById(R.id.etDescription)
+        btnAddPhoto = findViewById(R.id.btnAddPhoto)
+        btnCancel = findViewById(R.id.btnCancel)
+        btnSave = findViewById(R.id.btnSaveExpense)
+        imgPreview = findViewById(R.id.imgPreview)
+        tvNoImageSelected = findViewById(R.id.tvNoImageSelected)
+    }
+
+    private fun setupCategoryDropdown() {
+        categoryAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, categories)
+        etCategory.setAdapter(categoryAdapter)
+        etCategory.keyListener = null
+    }
+
+    private fun setupListeners() {
+        etDate.setOnClickListener { showDatePicker() }
+        etStartTime.setOnClickListener { showTimePicker(etStartTime) }
+        etEndTime.setOnClickListener { showTimePicker(etEndTime) }
+        etCategory.setOnClickListener { etCategory.showDropDown() }
+
+        etCategory.setOnItemClickListener { parent, _, position, _ ->
+            val selected = parent.getItemAtPosition(position).toString()
+            if (selected == "➕ Add New Category") {
+                showAddCategoryDialog()
+            }
+        }
+
+        btnAddPhoto.setOnClickListener { pickImage() }
+        btnCancel.setOnClickListener { finish() }
+        btnSave.setOnClickListener { saveExpense() }
+    }
+
+    private fun showDatePicker() {
+        DatePickerDialog(
+            this,
+            { _, year, month, dayOfMonth ->
+                etDate.setText(String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth))
+            },
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
+        ).show()
+    }
+
+    private fun showTimePicker(target: TextInputEditText) {
+        TimePickerDialog(
+            this,
+            { _, hourOfDay, minute ->
+                target.setText(String.format("%02d:%02d", hourOfDay, minute))
+            },
+            calendar.get(Calendar.HOUR_OF_DAY),
+            calendar.get(Calendar.MINUTE),
+            true
+        ).show()
+    }
+
+    private fun pickImage() {
+        val intent = Intent(Intent.ACTION_PICK).apply {
+            type = "image/*"
+        }
+        startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE)
+    }
+
+    private val viewModel: FirebaseExpenseViewModel by viewModels()
+
+    private fun saveExpense() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val amount = etAmount.text.toString().toDoubleOrNull()
+                if (amount == null) {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(this@AddExpenseActivity, "Invalid amount", Toast.LENGTH_SHORT).show()
+                    }
+                    return@launch
+                }
+                var newExpense = FirebaseExpense(
+                    amount = amount,
+                    date = etDate.text.toString(),
+                    startTime = etStartTime.text.toString(),
+                    endTime = etEndTime.text.toString(),
+                    category = etCategory.text.toString(),
+                    description = etDescription.text.toString(),
+                    userId = "user_id_placeholder" // Replace with actual user ID logic
+                )
+                selectedImageUri?.let { uri ->
+                    val imageUrl = viewModel.uploadPhoto(uri)
+                    newExpense = newExpense.copy(imageUrl = imageUrl)
+                    viewModel.insertExpense(newExpense)
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(this@AddExpenseActivity, "Expense saved successfully", Toast.LENGTH_SHORT).show()
+                        setResult(RESULT_OK)
+                        finish()
+                    }
+                    return@launch
+                }
+                viewModel.insertExpense(newExpense)
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@AddExpenseActivity, "Expense saved successfully", Toast.LENGTH_SHORT).show()
+                    setResult(RESULT_OK)
+                    finish()
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@AddExpenseActivity, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private fun showAddCategoryDialog() {
+        val editText = EditText(this)
+        AlertDialog.Builder(this)
+            .setTitle("New Category")
+            .setMessage("Enter the new category name:")
+            .setView(editText)
+            .setPositiveButton("Add") { dialog, _ ->
+                val newCategory = editText.text.toString().trim()
+                if (newCategory.isNotEmpty()) {
+                    categories.add(categories.size - 1, newCategory)
+                    categoryAdapter.notifyDataSetChanged()
+                    etCategory.setText(newCategory)
+                }
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+            .show()
+    }
+
+    @Deprecated("Deprecated in parent class")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_PICK_IMAGE && resultCode == RESULT_OK) {
+            selectedImageUri = data?.data
+            selectedImageUri?.let {
+                imgPreview.setImageURI(it)
+                imgPreview.visibility = ImageView.VISIBLE
+                tvNoImageSelected.visibility = TextView.GONE
+            }
+        }
+    }
+}
+
+package com.risparmio.budgetapp.data.model
+
+import java.util.*
+
+data class Expense(
+    val id: Int,
+    val date: Date,
+    val startTime: String?,
+    val endTime: String?,
+    val category: String?,
+    val amount: Double, // Matches Firebase model
+    val description: String?,
+    val imageUrl: String?
+)
+package com.risparmio.budgetapp.data.model.firebase
+
+data class FirebaseExpense(
+    val id: String? = null,
+    val amount: Double = 0.0, // Default value added for non-nullable property
+    val category: String? = null,
+    val date: String? = null,
+    val description: String? = null,
+    val endTime: String? = null,
+    val imageUrl: String? = null,
+    val startTime: String? = null,
+    val userId: String? = null
+)
+package com.risparmio.budgetapp.data.model.firebase
+
+import com.google.firebase.database.IgnoreExtraProperties
+
+@IgnoreExtraProperties
+data class FirebaseCategory(
+    var id: String = "",
+    var name: String = "",
+    var color: String? = null,
+    var userId: String = ""  // To associate categories with users
+)
+package com.risparmio.budgetapp.repository.firebase
+
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.google.firebase.database.*
+import com.risparmio.budgetapp.data.model.firebase.FirebaseCategory
+import java.util.*
+
+class FirebaseCategoryRepository {
+    private val database: FirebaseDatabase = FirebaseDatabase.getInstance()
+    private val categoriesRef: DatabaseReference = database.getReference("categories")
+    
+    private val _allCategories = MutableLiveData<List<FirebaseCategory>>()
+    val allCategories: LiveData<List<FirebaseCategory>> = _allCategories
+    
+    init {
+        // Listen for changes in the categories node
+        categoriesRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val categoriesList = mutableListOf<FirebaseCategory>()
+                for (categorySnapshot in snapshot.children) {
+                    val category = categorySnapshot.getValue(FirebaseCategory::class.java)
+                    category?.let { categoriesList.add(it) }
+                }
+                _allCategories.value = categoriesList
+            }
+            
+            override fun onCancelled(error: DatabaseError) {
+                // Handle error
+            }
+        })
+    }
+    
+    fun insert(category: FirebaseCategory, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        // Generate a unique ID if not provided
+        if (category.id.isEmpty()) {
+            category.id = categoriesRef.push().key ?: UUID.randomUUID().toString()
+        }
+        
+        categoriesRef.child(category.id).setValue(category)
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { onFailure(it) }
+    }
+    
+    fun delete(categoryId: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        categoriesRef.child(categoryId).removeValue()
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { onFailure(it) }
+    }
+}
+
+package com.risparmio.budgetapp.repository.firebase
+
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.google.firebase.database.*
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.risparmio.budgetapp.data.model.firebase.FirebaseExpense
+import java.util.*
+
+class FirebaseExpenseRepository {
+    private val database: FirebaseDatabase = FirebaseDatabase.getInstance()
+    private val expensesRef: DatabaseReference = database.getReference("expenses")
+    private val storage: FirebaseStorage = FirebaseStorage.getInstance()
+    private val storageRef: StorageReference = storage.reference.child("expense_photos")
+
+    private val _allExpenses = MutableLiveData<List<FirebaseExpense>>()
+    val allExpenses: LiveData<List<FirebaseExpense>> = _allExpenses
+
+    init {
+        expensesRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val expensesList = mutableListOf<FirebaseExpense>()
+                for (expenseSnapshot in snapshot.children) {
+                    val expense = expenseSnapshot.getValue(FirebaseExpense::class.java)
+                    expense?.let { expensesList.add(it) }
+                }
+                _allExpenses.value = expensesList
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Log error in production
+            }
+        })
+    }
+
+    fun insert(expense: FirebaseExpense, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        val expenseId = expense.id ?: expensesRef.push().key
+        val newExpense = expense.copy(id = expenseId)
+
+        // id is guaranteed to be non-null since we set it above
+        expensesRef.child(newExpense.id!!).setValue(newExpense)
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { onFailure(it) }
+    }
+
+    fun delete(expenseId: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        expensesRef.child(expenseId).removeValue()
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { onFailure(it) }
+    }
+
+    fun getByCategory(category: String): LiveData<List<FirebaseExpense>> {
+        val filteredExpenses = MutableLiveData<List<FirebaseExpense>>()
+        expensesRef.orderByChild("category").equalTo(category)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val expensesList = mutableListOf<FirebaseExpense>()
+                    for (expenseSnapshot in snapshot.children) {
+                        val expense = expenseSnapshot.getValue(FirebaseExpense::class.java)
+                        expense?.let { expensesList.add(it) }
+                    }
+                    filteredExpenses.value = expensesList
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    // Log error in production
+                }
+            })
+        return filteredExpenses
+    }
+
+    fun getByDateRange(startDate: String, endDate: String): LiveData<List<FirebaseExpense>> {
+        val filteredExpenses = MutableLiveData<List<FirebaseExpense>>()
+        expensesRef.orderByChild("date")
+            .startAt(startDate)
+            .endAt(endDate)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val expensesList = mutableListOf<FirebaseExpense>()
+                    for (expenseSnapshot in snapshot.children) {
+                        val expense = expenseSnapshot.getValue(FirebaseExpense::class.java)
+                        expense?.let { expensesList.add(it) }
+                    }
+                    filteredExpenses.value = expensesList
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    // Log error in production
+                }
+            })
+        return filteredExpenses
+    }
+
+    fun uploadPhoto(photoUri: android.net.Uri, onSuccess: (String) -> Unit, onFailure: (Exception) -> Unit) {
+        val photoRef = storageRef.child("${UUID.randomUUID()}.jpg")
+        photoRef.putFile(photoUri)
+            .addOnSuccessListener {
+                photoRef.downloadUrl.addOnSuccessListener { uri ->
+                    onSuccess(uri.toString())
+                }
+            }
+            .addOnFailureListener { onFailure(it) }
+    }
+}
+package com.risparmio.budgetapp.viewmodel.firebase
+
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import com.risparmio.budgetapp.data.model.firebase.FirebaseCategory
+import com.risparmio.budgetapp.repository.firebase.FirebaseCategoryRepository
+
+class FirebaseCategoryViewModel : ViewModel() {
+    private val repository = FirebaseCategoryRepository()
+    val allCategories: LiveData<List<FirebaseCategory>> = repository.allCategories
+    
+    fun insert(category: FirebaseCategory, onSuccess: () -> Unit = {}, onFailure: (Exception) -> Unit = {}) {
+        repository.insert(category, onSuccess, onFailure)
+    }
+    
+    fun delete(categoryId: String, onSuccess: () -> Unit = {}, onFailure: (Exception) -> Unit = {}) {
+        repository.delete(categoryId, onSuccess, onFailure)
+    }
+}
+
+package com.risparmio.budgetapp.viewmodel.firebase
+
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.storage.FirebaseStorage
+import com.risparmio.budgetapp.data.model.firebase.FirebaseExpense
+import com.risparmio.budgetapp.repository.firebase.FirebaseExpenseRepository
+import android.net.Uri
+import kotlinx.coroutines.tasks.await
+import java.util.UUID
+
+class FirebaseExpenseViewModel : ViewModel() {
+    private val repository = FirebaseExpenseRepository()
+    private val _allExpenses = MutableLiveData<List<FirebaseExpense>>()
+    val allExpenses: LiveData<List<FirebaseExpense>> = _allExpenses
+
+    init {
+        fetchExpenses()
+    }
+
+    private fun fetchExpenses() {
+        repository.allExpenses.observeForever { expenses ->
+            _allExpenses.value = expenses
+        }
+    }
+
+    suspend fun uploadPhoto(imageUri: Uri): String {
+        val storageRef = FirebaseStorage.getInstance().reference
+        val photoRef = storageRef.child("expense_images/${UUID.randomUUID()}")
+        val uploadTask = photoRef.putFile(imageUri)
+        return uploadTask.await().storage.downloadUrl.await().toString()
+    }
+
+    fun insertExpense(expense: FirebaseExpense) {
+        val databaseRef = FirebaseDatabase.getInstance().getReference("expenses")
+        val expenseId = databaseRef.push().key
+        expenseId?.let {
+            databaseRef.child(it).setValue(expense.copy(id = it))
+        }
+    }
+
+    fun getExpensesByCategory(category: String): LiveData<List<FirebaseExpense>> {
+        return repository.getByCategory(category)
+    }
+
+    fun getExpensesByDateRange(startDate: String, endDate: String): LiveData<List<FirebaseExpense>> {
+        return repository.getByDateRange(startDate, endDate)
+    }
+}

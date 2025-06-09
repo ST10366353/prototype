@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Base Theme for your App -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">#4CAF50</item>
+        <item name="colorPrimaryVariant">#388E3C</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorSecondary">#03DAC5</item>
+        <item name="colorSecondaryVariant">#018786</item>
+        <item name="colorOnSecondary">#000000</item>
+        <item name="android:windowBackground">#FFFFFF</item>
+        <item name="android:statusBarColor" tools:targetApi="l">#4CAF50</item>
+        <item name="android:navigationBarColor" tools:targetApi="l">#4CAF50</item>
+    </style>
+
+    <!-- 👇 Menu Item Styles -->
+    <style name="MenuItemStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:background">#F5F7F8</item>
+        <item name="android:padding">16dp</item>
+        <item name="android:layout_marginBottom">12dp</item>
+        <item name="android:layout_marginStart">12dp</item>
+        <item name="android:layout_marginEnd">12dp</item>
+        <item name="android:backgroundTintMode">src_in</item>
+    </style>
+
+    <style name="MenuItemTitle">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#222222</item>
+    </style>
+
+    <style name="MenuItemSubtitle">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">#777777</item>
+    </style>
+
+</resources>

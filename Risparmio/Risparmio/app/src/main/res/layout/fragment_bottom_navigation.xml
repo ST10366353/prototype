@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:orientation="horizontal"
+    android:background="#FFFFFF"
+    android:gravity="center"
+    android:elevation="8dp">
+
+    <TextView
+        android:id="@+id/nav_home"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="🏠Home"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/nav_analyze"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="📊Analyze"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/nav_add"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="➕Add"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/nav_history"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="📁History"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/nav_menu"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="📋Menu"
+        android:textSize="12sp" />
+</LinearLayout>
