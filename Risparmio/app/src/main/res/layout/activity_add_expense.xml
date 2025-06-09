@@ -137,7 +137,15 @@
                 android:text="📷 Add Photo"
                 android:backgroundTint="@color/primary_green"
                 android:textColor="#FFFFFF" />
+
         </LinearLayout>
+        <Button
+            android:id="@+id/btnTakePhoto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Take Photo"
+            android:layout_marginTop="8dp" />
+
 
         <!-- No Image Selected -->
         <TextView

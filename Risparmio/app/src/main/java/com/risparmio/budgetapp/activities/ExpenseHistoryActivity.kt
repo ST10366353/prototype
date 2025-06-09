@@ -20,7 +20,7 @@ class ExpenseHistoryActivity : AppCompatActivity() {
     private lateinit var btnDateRange: Button
     private lateinit var btnThisMonth: Button
     private lateinit var btnLastMonth: Button
-    private lateinit var spinnerCategory: Spinner
+
     private lateinit var searchView: SearchView
     private lateinit var emptyMessage: TextView
     private lateinit var adapter: ExpenseAdapter
@@ -32,11 +32,8 @@ class ExpenseHistoryActivity : AppCompatActivity() {
         setContentView(R.layout.activity_expense_history)
 
         recyclerExpenses = findViewById(R.id.recyclerExpenses)
-        btnLogout = findViewById(R.id.btnLogout)
         btnDateRange = findViewById(R.id.btnDateRange)
-        btnThisMonth = findViewById(R.id.btnThisMonth)
-        btnLastMonth = findViewById(R.id.btnLastMonth)
-        spinnerCategory = findViewById(R.id.spinnerCategory)
+
         searchView = findViewById(R.id.searchView)
         emptyMessage = findViewById(R.id.emptyMessage)
 
@@ -44,21 +41,6 @@ class ExpenseHistoryActivity : AppCompatActivity() {
         recyclerExpenses.layoutManager = LinearLayoutManager(this)
         recyclerExpenses.adapter = adapter
 
-        spinnerCategory.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedCategory = parent?.getItemAtPosition(position).toString()
-                if (selectedCategory == "All Categories") {
-                    viewModel.allExpenses.observe(this@ExpenseHistoryActivity) { expenses ->
-                        updateExpensesList(expenses)
-                    }
-                } else {
-                    viewModel.getExpensesByCategory(selectedCategory).observe(this@ExpenseHistoryActivity) { expenses ->
-                        updateExpensesList(expenses)
-                    }
-                }
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {

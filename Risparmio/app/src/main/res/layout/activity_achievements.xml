@@ -76,38 +76,138 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!-- Achievements Grid -->
-        <GridLayout
-            android:id="@+id/achievementsGrid"
-            android:layout_width="398dp"
+        <!-- Achievements List -->
+        <LinearLayout
+            android:id="@+id/achievementsList"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:columnCount="2"
-            android:columnOrderPreserved="false"
-            android:orientation="horizontal"
-            android:rowCount="3"
-            android:useDefaultMargins="true">
+            android:orientation="vertical">
 
-            <!-- Sample Card (to Repeat for all achievements) -->
-            <include
+            <!-- Achievement: Budget Hero -->
+            <LinearLayout
                 android:id="@+id/cardBudgetHero"
-                layout="@layout/achievement_card" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp"
+                android:background="@drawable/box_background"
+                android:layout_marginBottom="8dp">
 
-            <include
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="💰 Budget Hero"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Stick to your budget for 30 days"
+                    android:textSize="14sp"
+                    android:layout_marginTop="4dp" />
+            </LinearLayout>
+
+            <!-- Achievement: Category Expert -->
+            <LinearLayout
                 android:id="@+id/cardCategoryExpert"
-                layout="@layout/achievement_card" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp"
+                android:background="@drawable/box_background"
+                android:layout_marginBottom="8dp">
 
-            <include
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📊 Category Expert"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Track 5 different spending categories"
+                    android:textSize="14sp"
+                    android:layout_marginTop="4dp" />
+            </LinearLayout>
+
+            <!-- Achievement: Consistent Saver -->
+            <LinearLayout
                 android:id="@+id/cardConsistentSaver"
-                layout="@layout/achievement_card" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp"
+                android:background="@drawable/box_background"
+                android:layout_marginBottom="8dp">
 
-            <include
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🏦 Consistent Saver"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Save $100 every month for 3 months"
+                    android:textSize="14sp"
+                    android:layout_marginTop="4dp" />
+            </LinearLayout>
+
+            <!-- Achievement: Expense Master -->
+            <LinearLayout
                 android:id="@+id/cardExpenseMaster"
-                layout="@layout/achievement_card" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp"
+                android:background="@drawable/box_background"
+                android:layout_marginBottom="8dp">
 
-            <include
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🧾 Expense Master"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Log 50 expenses"
+                    android:textSize="14sp"
+                    android:layout_marginTop="4dp" />
+            </LinearLayout>
+
+            <!-- Achievement: First Step -->
+            <LinearLayout
                 android:id="@+id/cardFirstStep"
-                layout="@layout/achievement_card" />
-        </GridLayout>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp"
+                android:background="@drawable/box_background"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🚀 First Step"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Complete your first transaction"
+                    android:textSize="14sp"
+                    android:layout_marginTop="4dp" />
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>
